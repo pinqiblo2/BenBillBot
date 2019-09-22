@@ -23,6 +23,7 @@ var Benbill = new d.Client({
 //   2. Add character json
 //   3. Crit feedback
 
+/*
 let server_channels = [];
 
 Benbill.on('ready', () => {
@@ -30,7 +31,7 @@ Benbill.on('ready', () => {
         server_channels.push(Benbill.servers[s]);
 
     server_channels = server_channels.map(s => Object.keys(s.channels)).flat();
-});
+});*/
 
 Benbill.on('message', (user, userID, channelID, message, evt) => {
     try {
