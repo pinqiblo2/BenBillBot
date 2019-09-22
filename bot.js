@@ -3,6 +3,14 @@ var auth = require('./auth.json');
 var Roll = require('./Roll.js');
 var Storage = require('./Storage.json')
 var fs = require('fs');
+const express = require('express');
+const app = express();
+
+app.get('/BenBill/status', (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.send();
+});
+app.listen(3000, () => console.log('Server running on port 3000'));
 
 
 var Benbill = new d.Client({
