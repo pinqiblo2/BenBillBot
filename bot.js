@@ -27,7 +27,7 @@ Benbill.on('message', (user, userID, channelID, message, evt) => {
     command(userID, channelID, message);
 })
 
-app.get('/BenBill/roll', (req, res) => {
+app.put('/BenBill/roll', (req, res) => {
     let userId = req.param('userId');
     let channelId = req.param('channelId');
     let message = '/r ' + req.param('text');
