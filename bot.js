@@ -6,11 +6,11 @@ var fs = require('fs');
 const express = require('express');
 const app = express();
 
+app.listen(3000);
 app.get('/BenBill/status', (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   res.send();
 });
-app.listen(3000, () => console.log('Server running on port 3000'));
 
 
 var Benbill = new d.Client({
@@ -23,17 +23,20 @@ var Benbill = new d.Client({
 //   2. Add character json
 //   3. Crit feedback
 
-/*
-let server_channels = [];
-
-Benbill.on('ready', () => {
-    for (let s in Benbill.servers)
-        server_channels.push(Benbill.servers[s]);
-
-    server_channels = server_channels.map(s => Object.keys(s.channels)).flat();
-});*/
-
 Benbill.on('message', (user, userID, channelID, message, evt) => {
+    command(userID, channelID, message);
+})
+
+app.get('/BenBill/roll', (req, res) => {
+    let userId = req.param('userId');
+    let channelId = req.param('channelId');
+    let message = '/r ' + req.param('text');
+    command(userId, channelId, message);
+    res.set('Access-Control-Allow-Origin', '*');
+    res.send();
+});
+
+function command(userID, channelID, message) {
     try {
         let serverID = 0;
         if (Benbill.channels[channelID])
@@ -73,16 +76,7 @@ Benbill.on('message', (user, userID, channelID, message, evt) => {
             send(userID, 'DM')
         } else if (message.match(/^\/web($| )/i)) {
             send(userID, `http://pinqiblo.com?s=${serverID}&u=${userID}`)
-        }/* else {
-
-            let skill = new Skill(message)
-            if (skill.valid) {
-                Benbill.sendMessage({
-                    to: channelID,
-                    message: "<@" + userID + ">\n" + skill.use()
-                });
-            }
-        }*/
+        }
     } catch(e) {
         Benbill.sendMessage({
             to: channelID,
@@ -90,7 +84,7 @@ Benbill.on('message', (user, userID, channelID, message, evt) => {
         });
         console.log(e);
     }
-})
+}
 
 function send(channel, message, user) {
     Benbill.sendMessage({
