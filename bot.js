@@ -31,12 +31,11 @@ Benbill.on('message', (user, userID, channelID, message, evt) => {
 })
 
 app.post('/BenBill/roll', (req, res) => {
-    console.log("ROLL:", req, res);
     let userId = req.body.userId;
     let channelId = req.body.channelId;
     let message = '/r ' + req.body.text;
     console.log(userId, channelId, message);
-    command(userId, channelId, message);
+    command('ROLL', req.body, userId, channelId, message);
     res.set('Access-Control-Allow-Origin', '*');
     res.send();
 });
