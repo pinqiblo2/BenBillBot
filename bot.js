@@ -71,7 +71,7 @@ Benbill.on('message', (user, userID, channelID, message, evt) => {
             send(channelID, '`' + value + '`', userID);
         } else if (message.match(/^\/dm($| )/i)) {
             send(userID, 'DM')
-        } else if (message.match(/^\/web($\ )/)) {
+        } else if (message.match(/^\/web($| )/i)) {
             send(userID, `http://pinqiblo.com?s=${serverID}&u=${userID}`)
         }/* else {
 
