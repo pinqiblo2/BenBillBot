@@ -75,7 +75,7 @@ function command(userID, channelID, message) {
         } else if (message.match(/^\/dm($| )/i)) {
             send(userID, 'DM')
         } else if (message.match(/^\/web($| )/i)) {
-            send(userID, `http://pinqiblo.com?s=${serverID}&u=${userID}`)
+            send(userID, `http://pinqiblo.com?c=${channelID}&u=${userID}`)
         }
     } catch(e) {
         Benbill.sendMessage({
