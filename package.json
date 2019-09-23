@@ -1,0 +1,12 @@
+{
+  "name": "BenBillBot",
+  "version": "1.0.0",
+  "description": "Dices and Doommonsters",
+  "main": "bot.js",
+  "author": "Benbill",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+    "discord.js": "^11.5.1"
+  }
+}

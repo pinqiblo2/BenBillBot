@@ -4,7 +4,10 @@ var Roll = require('./Roll.js');
 var Storage = require('./Storage.json')
 var fs = require('fs');
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.listen(3000);
 app.get('/BenBill/status', (req, res) => {
@@ -27,10 +30,10 @@ Benbill.on('message', (user, userID, channelID, message, evt) => {
     command(userID, channelID, message);
 })
 
-app.put('/BenBill/roll', (req, res) => {
-    let userId = req.param('userId');
-    let channelId = req.param('channelId');
-    let message = '/r ' + req.param('text');
+app.post('/BenBill/roll', (req, res) => {
+    let userId = req.body.userId;
+    let channelId = req.body.channelId;
+    let message = '/r ' + req.body.text;
     command(userId, channelId, message);
     res.set('Access-Control-Allow-Origin', '*');
     res.send();
