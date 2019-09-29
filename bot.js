@@ -30,10 +30,6 @@ var Benbill = new d.Client({
 //   2. Add character json
 //   3. Crit feedback
 
-Benbill.on('message', (user, userID, channelID, message, evt) => {
-    command(userID, channelID, message);
-})
-
 app.post('/BenBill/roll', (req, res) => {
     let userId = req.body.userId;
     let channelId = req.body.channelId;
@@ -43,13 +39,20 @@ app.post('/BenBill/roll', (req, res) => {
     res.send();
 });
 
+app.get('BenBill/storage', (req, res) => {
+    let channelId = req.param('channelId');
+    let userId = req.param('userId');
+    let serverID = getServer(channelId, userId);
+    res.send(Storage[serverId][userId]);
+});
+
+Benbill.on('message', (user, userID, channelID, message, evt) => {
+    command(userID, channelID, message);
+})
+
 function command(userID, channelID, message) {
     try {
-        let serverID = 0;
-        if (Benbill.channels[channelID])
-            serverID = Benbill.channels[channelID].guild_id;
-        else
-            serverID = userID;
+        let serverID = getServer(channelId, userID);
 
         if (message.match(/^\/r($| )/i)) {
             let arg = args(message)[0];
@@ -146,4 +149,11 @@ function read(server, user, key) {
         return Storage[server][user][key];
     else
         return `Key '${key}' does not exist on this server for you`
+}
+
+function getServer(channel, user) {
+    if (Benbill.channels[channel])
+        return Benbill.channels[channel].guild_id;
+    else
+        return user;
 }
