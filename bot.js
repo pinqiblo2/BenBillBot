@@ -10,8 +10,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.listen(3000);
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://pinqiblo.com');
+    console.log("Header attached", req.body);
+    next();
+});
 app.get('/BenBill/status', (req, res) => {
-  res.set('Access-Control-Allow-Origin', '*');
   res.send();
 });
 
@@ -36,7 +40,6 @@ app.post('/BenBill/roll', (req, res) => {
     let message = '/r ' + req.body.text;
     console.log('ROLL', req.body, userId, channelId, message);
     command(userId, channelId, message);
-    res.set('Access-Control-Allow-Origin', '*');
     res.send();
 });
 
