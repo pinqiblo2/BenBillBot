@@ -11,8 +11,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.listen(3000);
 app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Headers', '*')
     res.setHeader('Access-Control-Allow-Origin', 'http://pinqiblo.com');
-    console.log("Header attached", req.body);
     next();
 });
 app.get('/BenBill/status', (req, res) => {
