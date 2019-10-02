@@ -52,7 +52,7 @@ Benbill.on('message', (user, userID, channelID, message, evt) => {
 
 function command(userID, channelID, message) {
     try {
-        let serverID = getServer(channelId, userID);
+        let serverID = getServer(channelID, userID);
 
         if (message.match(/^\/r($| )/i)) {
             let arg = args(message)[0];
@@ -92,7 +92,7 @@ function command(userID, channelID, message) {
             to: channelID,
             message: 'The bot has encountered an error. Please inform Ben if he is not around.'
         });
-        console.log(e);
+        console.log(message, e);
     }
 }
 
