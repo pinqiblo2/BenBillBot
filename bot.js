@@ -40,8 +40,8 @@ app.post('/BenBill/roll', (req, res) => {
 });
 
 app.get('/BenBill/storage', (req, res) => {
-    let channelId = req.params.channelId;
-    let userId = req.params.userId;
+    let channelId = req.query.channelId;
+    let userId = req.query.userId;
     let serverId = getServer(channelId, userId);
     console.log(Storage, serverId, userId);
     res.send(Storage[serverId][userId]);
