@@ -124,8 +124,22 @@ function create_roller(text, server, user) {
 }
 
 function args(command) {
-    let args = command.split(' ');
-    return args.slice(1)
+    args = [];
+    currentArg = 0;
+    inCommand = true;
+    inQuotes = false;
+    for (let i = 0; i < command.length; i++) {
+        if (!inCommand) {
+            if (command[i] === ' ' && !inQuotes)
+                currentArg++;
+            else if (command[i] === '"')
+                inQuotes = true;
+            else
+                args[currentArg] += command[i];
+        } else if (command[i] === ' ')
+            inCommand = false;
+    }
+    return args
 }
 
 function store(server, user, key, value) {
