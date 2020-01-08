@@ -128,7 +128,9 @@ function args(command) {
     currentArg = 0;
     inCommand = true;
     inQuotes = false;
+    console.log('command: ', command);
     for (let i = 0; i < command.length; i++) {
+        console.log('parsed: ', parsedArgs, 'i: ', currentArg, 'IC: ', inCommand, 'Q: ', inQuotes, 'char: ', command[i]);
         if (!inCommand) {
             if (command[i] === ' ' && !inQuotes)
                 currentArg++;
