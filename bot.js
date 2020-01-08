@@ -137,7 +137,10 @@ function args(command) {
             else if (command[i] === '"')
                 inQuotes = true;
             else
-                parsedArgs[currentArg] += command[i];
+                parsedArgs[currentArg] = 
+                    parsedArgs[currentArg] ? 
+                        command[i] + parsedArgs[currentArg] 
+                        : command[i];
         } else if (command[i] === ' ')
             inCommand = false;
     }
