@@ -124,7 +124,7 @@ function create_roller(text, server, user) {
 }
 
 function args(command) {
-    args = [];
+    parsedArgs = [];
     currentArg = 0;
     inCommand = true;
     inQuotes = false;
@@ -135,11 +135,11 @@ function args(command) {
             else if (command[i] === '"')
                 inQuotes = true;
             else
-                args[currentArg] += command[i];
+                parsedArgs[currentArg] += command[i];
         } else if (command[i] === ' ')
             inCommand = false;
     }
-    return args
+    return parsedArgs
 }
 
 function store(server, user, key, value) {
