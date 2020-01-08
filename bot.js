@@ -139,7 +139,7 @@ function args(command) {
             else
                 parsedArgs[currentArg] = 
                     parsedArgs[currentArg] ? 
-                        command[i] + parsedArgs[currentArg] 
+                        parsedArgs[currentArg] + command[i]
                         : command[i];
         } else if (command[i] === ' ')
             inCommand = false;
