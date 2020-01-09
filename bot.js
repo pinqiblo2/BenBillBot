@@ -91,7 +91,7 @@ function command(userID, channelID, message) {
     } catch(e) {
         Benbill.sendMessage({
             to: channelID,
-            message: 'The bot has encountered an error. Please inform Ben if he is not around.'
+            message: `<@263713926376587264> the bot has encountered an error.`
         });
         console.log(message, e);
     }
