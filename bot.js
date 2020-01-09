@@ -135,7 +135,7 @@ function args(command) {
             if (command[i] === ' ' && !inQuotes)
                 currentArg++;
             else if (command[i] === '"')
-                inQuotes = true;
+                inQuotes = !inQuotes;
             else
                 parsedArgs[currentArg] = 
                     parsedArgs[currentArg] ? 
