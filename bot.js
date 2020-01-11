@@ -33,7 +33,7 @@ var Benbill = new d.Client({
 app.post('/BenBill/roll', (req, res) => {
     let userId = req.body.userId;
     let channelId = req.body.channelId;
-    let message = '/r ' + req.body.text;
+    let message = '-r ' + req.body.text;
     console.log('ROLL', req.body, userId, channelId, message);
     command(userId, channelId, message);
     res.send();
@@ -55,10 +55,10 @@ function command(userID, channelID, message) {
     try {
         let serverID = getServer(channelID, userID);
 
-        if (message.match(/^\/r($| )/i)) {
+        if (message.match(/^\-r($| )/i)) {
             let arg = args(message)[0];
             send(channelID, create_roller(arg, serverID, userID).output(), userID)
-        } else if (message.match(/^\/rr($| )/i)) {
+        } else if (message.match(/^\-rr($| )/i)) {
             let text = args(message)[0] || '';
             let count = args(message)[1] || 1;
             let stack = args(message)[2] || 0;
