@@ -59,7 +59,7 @@ function command(userID, channelID, message) {
         let serverID = getServer(channelID, userID);
 
         for (let plug in plugins) {
-            //if (PluginRegistry[serverID].includes(plug))
+            if (PluginRegistry[serverID] && PluginRegistry[serverID].includes(plug))
                 plugins[plug].command(userID, channelID, message, send);
         }
 
@@ -95,6 +95,14 @@ function command(userID, channelID, message) {
             send(userID, 'DM')
         } else if (message.match(/^\/web($| )/i)) {
             send(userID, `http://pinqiblo.com?c=${channelID}&u=${userID}`)
+        } else if (message.match(/^\/load /)) {
+            load_plugin(serverID, args(message)[0]);
+            write_plugins();
+            send(channelID, 'Loaded ' + args(message)[0], userID)
+        } else if (message.match(/^\/unload /)) {
+            unload_plugin(serverID, args(message)[0]);
+            write_plugins();
+            send(channelID, 'Unloaded ' + args(message)[0], userID)
         }
     } catch(e) {
         Benbill.sendMessage({
@@ -175,6 +183,25 @@ function read(server, user, key) {
         return Storage[server][user][key];
     else
         return `Key '${key}' does not exist on this server for you`
+}
+
+function load_plugin(server, plugin) {
+    if (!PluginRegistry[server])
+        PluginRegistry[server] = [plugin];
+    else if (!PluginRegistry[server].includes(plugin))
+        PluginRegistry[server].push(plugin);
+}
+
+function unload_plugin(server, plugin) {
+    if (PluginRegistry[server] && PluginRegistry[server].includes(plugin))
+        PluginRegistry[server].splice(PluginRegistry[server].indexOf(plugin));
+}
+
+function write_plugins() {
+    fs.writeFile('PluginMap.json', JSON.stringify(PluginRegistry),
+     (err) => {
+        if (err) throw err;
+     });
 }
 
 function getServer(channel, user) {
