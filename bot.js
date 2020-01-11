@@ -3,6 +3,7 @@ var auth = require('./auth.json');
 var Roll = require('./Roll.js');
 var Storage = require('./Storage.json')
 var PluginRegistry = require('./PluginMap.json')
+var plugins = require('./plugins');
 var fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -20,7 +21,6 @@ app.get('/BenBill/status', (req, res) => {
   res.send();
 });
 
-import * as plugins from './plugins';
 
 
 var Benbill = new d.Client({
@@ -136,9 +136,7 @@ function args(command) {
     currentArg = 0;
     inCommand = true;
     inQuotes = false;
-    console.log('command: ', command);
     for (let i = 0; i < command.length; i++) {
-        console.log('parsed: ', parsedArgs, 'i: ', currentArg, 'IC: ', inCommand, 'Q: ', inQuotes, 'char: ', command[i]);
         if (!inCommand) {
             if (command[i] === ' ' && !inQuotes)
                 currentArg++;
