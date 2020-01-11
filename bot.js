@@ -2,6 +2,7 @@ var d = require('discord.io');
 var auth = require('./auth.json');
 var Roll = require('./Roll.js');
 var Storage = require('./Storage.json')
+var PluginRegistry = require('./PluginMap.json')
 var fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -18,6 +19,8 @@ app.use((req, res, next) => {
 app.get('/BenBill/status', (req, res) => {
   res.send();
 });
+
+import * as plugins from './plugins';
 
 
 var Benbill = new d.Client({
@@ -54,6 +57,11 @@ Benbill.on('message', (user, userID, channelID, message, evt) => {
 function command(userID, channelID, message) {
     try {
         let serverID = getServer(channelID, userID);
+
+        for (let plug in plugins) {
+            //if (PluginRegistry[serverID].includes(plug))
+                plugins[plug].command(userID, channelID, message, send);
+        }
 
         if (message.match(/^\-r($| )/i)) {
             let arg = args(message)[0];

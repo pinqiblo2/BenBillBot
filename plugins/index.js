@@ -1,0 +1,1 @@
+export {default as ArsMagica} from './ArsMagica.js'
