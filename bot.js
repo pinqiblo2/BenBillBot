@@ -1,12 +1,18 @@
-var d = require('discord.io');
-var auth = require('./auth.json');
-var Roll = require('./Roll.js');
-var Storage = require('./Storage.json')
-var PluginRegistry = require('./PluginMap.json')
-var plugins = require('./plugins');
-var fs = require('fs');
+const d = require('discord.io');
+const auth = require('./auth.json');
+
+const Roll = require('./Roll.js');
+const Common = require('./Common.js');
+
+const Storage = require('./Storage.json');
+
+const PluginRegistry = require('./PluginMap.json');
+const plugins = require('./plugins');
+
+const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
+
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -60,23 +66,23 @@ function command(userID, channelID, message) {
 
         for (let plug in plugins) {
             if (PluginRegistry[serverID] && PluginRegistry[serverID].includes(plug))
-                plugins[plug].command(userID, channelID, message, send);
+                plugins[plug].command(userID, channelID, serverID, message, send);
         }
 
         if (message.match(/^\-r($| )/i)) {
-            let arg = args(message)[0];
+            let arg = Common.args(message)[0];
             send(channelID, create_roller(arg, serverID, userID).output(), userID)
         } else if (message.match(/^\-rr($| )/i)) {
-            let text = args(message)[0] || '';
-            let count = args(message)[1] || 1;
-            let stack = args(message)[2] || 0;
+            let text = Common.args(message)[0] || '';
+            let count = Common.args(message)[1] || 1;
+            let stack = Common.args(message)[2] || 0;
             let roller = create_roller(text, serverID, userID);
             let results = [];
             for (let i = 0; i < count; i++)
                 results.push(roller.roll(i*stack).output());
             send(channelID, results, userID)
         } else if (message.match(/^\/avg($| )/i)) {
-            let arg = args(message)[0];
+            let arg = Common.args(message)[0];
             let roller = create_roller(arg, serverID, userID);
             let data = [];
             for (let i = 0; i < 10000; i++)
@@ -85,24 +91,24 @@ function command(userID, channelID, message) {
             data.sort();
             send(channelID, 'Mean: `' + sum/10000.0 + '`\nMedian: `' + data[4999] + '`')
         } else if (message.match(/^\/save /i)){
-            store(serverID, userID, args(message)[0], args(message)[1]);
+            store(serverID, userID, Common.args(message)[0], Common.args(message)[1]);
             write_storage();
-            send(channelID, `\`${args(message)[0]}: ${args(message)[1]}\` saved.`, userID)
+            send(channelID, `\`${Common.args(message)[0]}: ${Common.args(message)[1]}\` saved.`, userID)
         } else if (message.match(/^\/view /i)){
-            let value = read(serverID, userID, args(message)[0]);
+            let value = read(serverID, userID, Common.args(message)[0]);
             send(channelID, '`' + value + '`', userID);
         } else if (message.match(/^\/dm($| )/i)) {
             send(userID, 'DM')
         } else if (message.match(/^\/web($| )/i)) {
             send(userID, `http://pinqiblo.com?c=${channelID}&u=${userID}`)
         } else if (message.match(/^\/load /)) {
-            load_plugin(serverID, args(message)[0]);
+            load_plugin(serverID, Common.args(message)[0]);
             write_plugins();
-            send(channelID, 'Loaded ' + args(message)[0], userID)
+            send(channelID, 'Loaded ' + Common.args(message)[0], userID)
         } else if (message.match(/^\/unload /)) {
-            unload_plugin(serverID, args(message)[0]);
+            unload_plugin(serverID, Common.args(message)[0]);
             write_plugins();
-            send(channelID, 'Unloaded ' + args(message)[0], userID)
+            send(channelID, 'Unloaded ' + Common.args(message)[0], userID)
         }
     } catch(e) {
         Benbill.sendMessage({
@@ -137,28 +143,6 @@ function create_roller(text, server, user) {
     }
 
     return new Roll(text);
-}
-
-function args(command) {
-    parsedArgs = [];
-    currentArg = 0;
-    inCommand = true;
-    inQuotes = false;
-    for (let i = 0; i < command.length; i++) {
-        if (!inCommand) {
-            if (command[i] === ' ' && !inQuotes)
-                currentArg++;
-            else if (command[i] === '"')
-                inQuotes = !inQuotes;
-            else
-                parsedArgs[currentArg] = 
-                    parsedArgs[currentArg] ? 
-                        parsedArgs[currentArg] + command[i]
-                        : command[i];
-        } else if (command[i] === ' ')
-            inCommand = false;
-    }
-    return parsedArgs
 }
 
 function store(server, user, key, value) {
