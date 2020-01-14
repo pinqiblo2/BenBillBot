@@ -21,6 +21,8 @@
 }*/
 
 exports.args = function(command) {
+    if (command.indexOf(' ') < 0) return {};
+    
     let unparsedArgs = command.slice(command.indexOf(' ')+1);
     let anonymousParam = 0;
     let param = "";
