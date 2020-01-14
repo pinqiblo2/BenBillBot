@@ -1,7 +1,8 @@
 const Spells = require('./Spells.json')
+const fs = require('fs');
 
 exports.command = function(userID, channelID, serverID, message, sender) {
-    const Common = require('./Common.js');
+    const Common = require('../Common.js');
 
     if (message.match(/^\/spell /i)) {
         argList = Common.args(message);
@@ -54,8 +55,5 @@ function write_spell(spell, user, server) {
         Spells[server][user] = [];
     Spells[server][user].push(spell);
 
-    fs.writeFile('Spells.json', JSON.stringify(Spells),
-     (err) => {
-        if (err) throw err;
-     });
+    fs.writeFileSync('plugins/Spells.json', JSON.stringify(Spells));
 }
