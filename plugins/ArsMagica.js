@@ -7,7 +7,7 @@ exports.command = function(userID, channelID, serverID, message, sender) {
     if (message.match(/^\/spell /i)) {
         let argList = Common.args(message);
         let knownParams = ['arts', 'range', 'duration', 'target', 'level'];
-        let userSpells = Spells[serverID] && Spells[serverID][userID];
+        let userSpells = (Spells[serverID] && Spells[serverID][userID]) || {};
         let notes = [];
 
         switch (argList[0]) {

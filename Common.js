@@ -53,6 +53,7 @@ exports.args = function(command) {
         if (m_StandardArg || m_QuoteArg) {
             if (anonymousArg) {
                 argDict[anonymousParam] = localArg;
+                anonymousParam++;
             } else {
                 argDict[param] = localArg;
                 anonymousArg = true;
