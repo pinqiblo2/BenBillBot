@@ -5,9 +5,10 @@ exports.command = function(userID, channelID, serverID, message, sender) {
     const Common = require('../Common.js');
 
     if (message.match(/^\/spell /i)) {
-        argList = Common.args(message);
-        knownParams = ['arts', 'range', 'duration', 'target', 'level'];
-        userSpells = Spells[serverID] && Spells[serverID][userID];
+        let argList = Common.args(message);
+        let knownParams = ['arts', 'range', 'duration', 'target', 'level'];
+        let userSpells = Spells[serverID] && Spells[serverID][userID];
+        let notes = [];
 
         switch (argList[0]) {
             case 'create':
@@ -24,7 +25,6 @@ exports.command = function(userID, channelID, serverID, message, sender) {
                     target: 'individual',
                     level: 1
                 };
-                let notes = [];
 
                 for (let param in argList) {
                     if (knownParams.includes(param))
@@ -38,7 +38,6 @@ exports.command = function(userID, channelID, serverID, message, sender) {
                 write_spell(argList['name'], spell, userID, serverID)
 
                 notes.push(`Spell **${argList['name']}** saved.`);
-                sender(channelID, notes.join('\n'), userID);
                 break;
             case 'edit':
                 // Note field changes
@@ -46,7 +45,6 @@ exports.command = function(userID, channelID, serverID, message, sender) {
                     return sender(channelID, `No spell name supplied for editing`, userID);
 
                 let editSpell = userSpells[argList[1]];
-                let notes = [];
 
                 if (!editSpell)
                     return sender(channelID, `The spell **${argList['name']}** doesn't exist`, userID);
@@ -70,12 +68,13 @@ exports.command = function(userID, channelID, serverID, message, sender) {
                 write_spell(argList['name'] || argList[1], editSpell, userID, serverID);
 
                 notes.push(`Spell **${argList['name'] || argList[1]}** saved.`);
-                sender(channelID, notes.join('\n'), userID);
                 break;
             case 'cast':
                 // Format all pretty like
                 break;
         }
+
+        sender(channelID, notes.join('\n'), userID);
     }
 }
 
