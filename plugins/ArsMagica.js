@@ -45,7 +45,10 @@ exports.command = function(userID, channelID, serverID, message, sender) {
                 if (!argList[1])
                     return sender(channelID, `No spell name supplied for editing`, userID);
 
-                let editSpell = userSpells[argList[1]];
+                    let editSpell;
+                    for (spell in userSpells)
+                        if (argList[1].toLowerCase() === spell.toLowerCase())
+                            editSpell = userSpells[spell];
 
                 if (!editSpell)
                     return sender(channelID, `The spell **${argList['name']}** doesn't exist`, userID);
@@ -74,7 +77,14 @@ exports.command = function(userID, channelID, serverID, message, sender) {
                 if (!argList[1])
                     return sender(channelID, `No spell name supplied for casting`, userID);
 
-                let casting = userSpells[argList[1]];
+                let casting;
+                for (spell in userSpells)
+                    if (argList[1].toLowerCase() === spell.toLowerCase())
+                        casting = userSpells[spell];
+
+
+                if (!casting)
+                    return sender(channelID, `No spell found with name ${argList[1]}`)
 
                 notes.push(`**${argList[1]}** (Level ${casting.level})`); //name, level
                 notes.push(`*${casting.arts}*`); //arts
