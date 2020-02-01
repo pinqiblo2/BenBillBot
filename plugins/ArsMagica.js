@@ -46,7 +46,7 @@ exports.command = function(userID, channelID, serverID, message, sender) {
                     return sender(channelID, `No spell name supplied for editing`, userID);
 
                     let editSpell;
-                    for (spell in userSpells)
+                    for (let spell in userSpells)
                         if (argList[1].toLowerCase() === spell.toLowerCase())
                             editSpell = userSpells[spell];
 
@@ -78,7 +78,7 @@ exports.command = function(userID, channelID, serverID, message, sender) {
                     return sender(channelID, `No spell name supplied for casting`, userID);
 
                 let casting;
-                for (spell in userSpells)
+                for (let spell in userSpells)
                     if (argList[1].toLowerCase() === spell.toLowerCase())
                         casting = userSpells[spell];
 
