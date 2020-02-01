@@ -6,7 +6,7 @@ exports.command = function(userID, channelID, serverID, message, sender) {
 
     if (message.match(/^\/spell /i)) {
         let argList = Common.args(message);
-        let knownParams = ['arts', 'range', 'duration', 'target', 'level'];
+        let knownParams = ['arts', 'range', 'duration', 'target', 'level', 'description'];
         let userSpells = (Spells[serverID] && Spells[serverID][userID]) || {};
         let notes = [];
 
@@ -23,7 +23,8 @@ exports.command = function(userID, channelID, serverID, message, sender) {
                     range: 'personal',
                     duration: 'momentary',
                     target: 'individual',
-                    level: 1
+                    level: 1,
+                    description: 'magic'
                 };
 
                 for (let param in argList) {
@@ -33,7 +34,7 @@ exports.command = function(userID, channelID, serverID, message, sender) {
 
                 for (let i in knownParams)
                     if (!(knownParams[i] in argList))
-                        notes.push(`Argument **${knownParams[i]}** was missing, defaulted to **${spell[knownParams[i]]}**`);
+                        notes.push(`Property **${knownParams[i]}** was missing, defaulted to **${spell[knownParams[i]]}**`);
                 
                 write_spell(argList['name'], spell, userID, serverID)
 
@@ -53,7 +54,7 @@ exports.command = function(userID, channelID, serverID, message, sender) {
                     if (userSpells[argList['name']])
                         return sender(channelID, `The spell **${argList['name']}** already exists`, userID);
                     else {
-                        notes.push(`Argument **name** was changed from **${argList[1]}** to **${argList['name']}**`);
+                        notes.push(`Property **name** was changed from **${argList[1]}** to **${argList['name']}**`);
                         write_spell(argList['name'], editSpell, userID, serverID);
                         remove_spell(argList[1], userID, serverID);
                         editSpell = userSpells[argList['name']];
@@ -61,7 +62,7 @@ exports.command = function(userID, channelID, serverID, message, sender) {
 
                 for (let i in editSpell)
                     if (i in argList){
-                        notes.push(`Argument **${i}** was changed from **${editSpell[i]}** to **${argList[i]}**`)
+                        notes.push(`Property **${i}** was changed from **${editSpell[i]}** to **${argList[i]}**`)
                         editSpell[i] = argList[i];
                     }
 
@@ -70,7 +71,16 @@ exports.command = function(userID, channelID, serverID, message, sender) {
                 notes.push(`Spell **${argList['name'] || argList[1]}** saved.`);
                 break;
             case 'cast':
-                // Format all pretty like
+                if (!argList[1])
+                    return sender(channelID, `No spell name supplied for casting`, userID);
+
+                let casting = userSpells[argList[1]];
+
+                notes.push(`**${argList[1]}** (Level ${casting.level})`); //name, level
+                notes.push(`*${casting.arts}*`); //arts
+                notes.push(`Range: ${casting.range}, Duration: ${casting.duration}, Target: ${casting.target}`); //ran, dur, tar
+                notes.push(`\`\`\`${casting.description}\`\`\``); //desc
+                
                 break;
         }
 

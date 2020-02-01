@@ -8,12 +8,13 @@ let r_explode = /!/;
 let r_brief = /b/;
 
 class Roll {
-    constructor(text) {
+    constructor(text, s_config, d_config) {
+        let dice_config = s_config && s_config.default && s_config.default.dice;
         this.text = text;
-        this.die = 100;
-        this.count = 1;
+        this.die = parseInt(dice_config && dice_config.value || d_config.default.dice.value);
+        this.count = parseInt(dice_config && dice_config.count || d_config.default.dice.count);
         this.mod = 0;
-        this.keep = 0;
+        this.keep = parseInt(dice_config && dice_config.keep || d_config.default.dice.keep);
         this.explode = false;
         this.brief = false;
         this.roll_list = [];

@@ -1,25 +1,3 @@
-/*exports.args = function(command) {
-    parsedArgs = [];
-    currentArg = 0;
-    inCommand = true;
-    inQuotes = false;
-    for (let i = 0; i < command.length; i++) {
-        if (!inCommand) {
-            if (command[i] === ' ' && !inQuotes)
-                currentArg++;
-            else if (command[i] === '"')
-                inQuotes = !inQuotes;
-            else
-                parsedArgs[currentArg] = 
-                    parsedArgs[currentArg] ? 
-                        parsedArgs[currentArg] + command[i]
-                        : command[i];
-        } else if (command[i] === ' ')
-            inCommand = false;
-    }
-    return parsedArgs
-}*/
-
 exports.args = function(command) {
     if (command.indexOf(' ') < 0) return {};
     
@@ -32,9 +10,9 @@ exports.args = function(command) {
 
     while (sliced.length > 0) {
 
-        let m_QuoteArg = sliced.match(/^"[^"]*"($| )/i);
-        let m_StandardArg = sliced.match(/^[a-z0-9]+($| )/i);
-        let m_Parameter = sliced.match(/^[a-z0-9]+: ?/i);
+        let m_QuoteArg = sliced.match(/^"[^"]*"($| +)/i);
+        let m_StandardArg = sliced.match(/^[a-z0-9/:.+!$-]+($| +)/i);
+        let m_Parameter = sliced.match(/^[a-z0-9]+: */i);
         let localArg = "";
         let skipLen = 0;
 
@@ -59,6 +37,9 @@ exports.args = function(command) {
                 anonymousArg = true;
             }
         }
+
+        if (!(m_Parameter || m_QuoteArg || m_StandardArg))
+            throw Error(`Unable to parse ${command}`);
     
         sliced = sliced.slice(skipLen);
     }

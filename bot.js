@@ -3,6 +3,7 @@ const auth = require('./auth.json');
 
 const Roll = require('./Roll.js');
 const Common = require('./Common.js');
+const Help = require('./man.json');
 
 const Storage = require('./Storage.json');
 
@@ -94,26 +95,53 @@ function command(userID, channelID, message) {
             store(serverID, userID, Common.args(message)[0], Common.args(message)[1]);
             write_storage();
             send(channelID, `\`${Common.args(message)[0]}: ${Common.args(message)[1]}\` saved.`, userID)
-        } else if (message.match(/^\/view /i)){
-            let value = read(serverID, userID, Common.args(message)[0]);
-            send(channelID, '`' + value + '`', userID);
+        } else if (message.match(/^\/view /i) || message.match(/^\$.+\s*$/)){
+            let tag = '';
+            if (message[0] === '$')
+                tag = message.trim().slice(1);
+            else
+                tag = Common.args(message)[0];
+            let value = read(serverID, userID, tag);
+            send(channelID, value);
         } else if (message.match(/^\/dm($| )/i)) {
-            send(userID, 'DM')
+            send(userID, 'DM ' + userID)
         } else if (message.match(/^\/web($| )/i)) {
             send(userID, `http://pinqiblo.com?c=${channelID}&u=${userID}`)
         } else if (message.match(/^\/load /)) {
+            authorize(Common.args(message)[1]);
             load_plugin(serverID, Common.args(message)[0]);
             write_plugins();
             send(channelID, 'Loaded ' + Common.args(message)[0], userID)
         } else if (message.match(/^\/unload /)) {
+            authorize(Common.args(message)[1]);
             unload_plugin(serverID, Common.args(message)[0]);
             write_plugins();
             send(channelID, 'Unloaded ' + Common.args(message)[0], userID)
+        } else if (message.match(/^\/config /)) {
+            let args = Common.args(message);
+            authorize(args.auth);
+            write_config(serverID, args);
+            let configStr = '';
+            let value = '';
+            for (let i = 0; args[i+1]; i++)
+                if (args[i+2])
+                    configStr += `${args[i]} -> `;
+                else {
+                    configStr += args[i];
+                    value = args[i+1]
+                }
+            send(channelID, `Configured \`${configStr}\` to **${value}**`, userID)
+        } else if (message.match(/^\/help($| )/)) {
+            let arg = Common.args(message)[0];
+            if (arg && (arg in Help))
+                send(userID, Help[arg]);
+            else
+                send(userID, Help["*"]);
         }
     } catch(e) {
         Benbill.sendMessage({
-            to: channelID,
-            message: `<@263713926376587264> the bot has encountered an error.`
+            to: "263713926376587264",
+            message: e.message
         });
         console.log(message, e);
     }
@@ -142,7 +170,8 @@ function create_roller(text, server, user) {
         text = text.replace(m_key[0], value)
     }
 
-    return new Roll(text);
+    let config = require('./config.json');
+    return new Roll(text, config[server], config['*']);
 }
 
 function store(server, user, key, value) {
@@ -186,6 +215,47 @@ function write_plugins() {
      (err) => {
         if (err) throw err;
      });
+}
+
+function write_config(serverID, args) {
+    let config = require('./config.json');
+    if (!config[serverID]) config[serverID] = {};
+
+    let configPtr = config[serverID];
+    for (let i = 0; args[i+1]; i++) {
+        if (!configPtr[args[i]])
+            configPtr[args[i]] = {};
+        if (args[i+2])
+            configPtr = configPtr[args[i]];
+        else
+            configPtr[args[i]] = args[i+1];
+    }
+    
+    fs.writeFile('config.json', JSON.stringify(config),
+    (err) => {
+        if (err) throw err;
+    });
+}
+
+function authorize(code) {
+    let data = fs.readFileSync('auth.txt');
+    if (code !== data.toString())
+        throw  new Error('Unauthed code: ' + code);
+
+    fs.writeFile('auth.txt', newAuthCode(), 
+    (err) => {
+        if (err) throw err;
+    });
+}
+
+function newAuthCode() {
+    let code = '';
+    for (let i = 0; i < 64; i++) {
+        let c = String.fromCharCode(Math.floor(Math.random()*26)+65);
+        code += c;
+    }
+
+    return code;
 }
 
 function getServer(channel, user) {
