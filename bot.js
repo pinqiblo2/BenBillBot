@@ -239,7 +239,7 @@ function write_config(serverID, args) {
 
 function authorize(code) {
     let data = fs.readFileSync('auth.txt');
-    if (code !== data.toString())
+    if (code !== data.toString().trim())
         throw  new Error('Unauthed code: ' + code);
 
     fs.writeFile('auth.txt', newAuthCode(), 
