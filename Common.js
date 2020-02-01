@@ -11,7 +11,7 @@ exports.args = function(command) {
     while (sliced.length > 0) {
 
         let m_QuoteArg = sliced.match(/^"[^"]*"($| +)/i);
-        let m_StandardArg = sliced.match(/^[a-z0-9/:.+!$-]+($| +)/i);
+        let m_StandardArg = sliced.match(/^[a-z0-9/:.+!$-]*[a-z0-9/.+!$-]($| +)/i);
         let m_Parameter = sliced.match(/^[a-z0-9]+: */i);
         let localArg = "";
         let skipLen = 0;
