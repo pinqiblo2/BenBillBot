@@ -11,7 +11,7 @@ module.exports = {
       ref: 'origin/master',
       repo: 'git@github.com:pinqiblo2/BenBillBot.git',
       path: '/home/ubuntu/BenBillBot',
-      'post-deploy': 'npm ci && pm2 startOrRestart ecosystem.config.js'
+      'post-deploy': 'npm install && pm2 startOrRestart ecosystem.config.js'
     }
   }
 }
