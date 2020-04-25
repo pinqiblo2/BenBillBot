@@ -3,3 +3,7 @@ Storage.json
 auth.json
 skills.json
 node_modules
+PluginMap.json
+auth.txt
+config.json
+plugins/Spells.json
