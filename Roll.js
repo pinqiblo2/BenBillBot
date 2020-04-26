@@ -9,9 +9,9 @@ let r_brief = /b/;
 let r_conditional = /[><=]=?\d+/;
 
 class Roll {
-    constructor(text, s_config, d_config) {
+    constructor(text, s_config, d_config, server, user) {
         let dice_config = s_config && s_config.default && s_config.default.dice;
-        this.text = text;
+        this.text = this.insert_vars(text, server, user);
         this.die = parseInt(dice_config && dice_config.value || d_config.default.dice.value);
         this.count = parseInt(dice_config && dice_config.count || d_config.default.dice.count);
         this.mod = 0;
@@ -157,6 +157,17 @@ class Roll {
 
         output += '**' + this.result + '**';
         return output;
+    }
+
+    insert_vars(text, server, user) {
+        while (text.match(/\$\w*/i)) {
+            let m_key = text.match(/\$\w*/i);
+            let key = m_key[0].slice(1).toLowerCase();
+            let value = require('./Storage.json')[server][user][key] || '';
+
+            text = text.replace(m_key[0], value)
+        }
+        return text;
     }
 
 }

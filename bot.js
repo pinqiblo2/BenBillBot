@@ -159,22 +159,8 @@ function send(channel, message, user) {
 
 function create_roller(text, server, user) {
     text = text || '';
-
-    let relevant_storage = {};
-    if (Storage[server]
-        && Storage[server][user])
-        relevant_storage = Storage[server][user];
-
-    while (text.match(/\$\w*/i)) {
-        let m_key = text.match(/\$\w*/i);
-        let key = m_key[0].slice(1).toLowerCase();
-        let value = Storage[server][user][key] || '';
-
-        text = text.replace(m_key[0], value)
-    }
-
     let config = require('./config.json');
-    return new Roll(text, config[server], config['*']);
+    return new Roll(text, config[server], config['*'], server, user);
 }
 
 function store(server, user, key, value) {
