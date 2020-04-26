@@ -1,5 +1,6 @@
 exports.command = function(userID, channelID, serverID, message, sender) {
     const Common = require('../Common.js');
+    const Roll = require('./Roll.js');
 
     if (message.match(/^\-r \d+$/i)) {
         message += 'd6>3';
@@ -25,7 +26,8 @@ function calcBotch(roller) {
 }
 
 function create_roller(text, server, user) {
+    const Roll = require('./Roll.js');
     text = text || '';
     let config = require('../config.json');
-    return new require('../Roll.js')(text, config[server], config['*'], server, user);
+    return new Roll(text, config[server], config['*'], server, user);
 }
