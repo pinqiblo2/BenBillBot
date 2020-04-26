@@ -25,7 +25,7 @@ function calcBotch(roller) {
 
 function calcTriggers(roller) {
     let count = roller.roll_list.filter(r => r === 6).length;
-    return count > 0 ? count > 1 ? ` (${count} triggers)` : '1 trigger' : '';
+    return count > 0 ? count > 1 ? ` (${count} triggers)` : ' (1 trigger)' : '';
 }
 
 function create_roller(text, server, user) {
