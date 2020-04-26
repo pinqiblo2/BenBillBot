@@ -6,7 +6,8 @@ exports.command = function(userID, channelID, serverID, message, sender) {
         let arg = Common.args(message)[0];
         let roller = create_roller(arg, serverID, userID);
         let botch = calcBotch(roller) ? ' (botched if failed)' : ''
-        sender(channelID, roller.output()+botch, userID)
+        let triggers = roller.roll_list.filter(r => r === 6).length;
+        sender(channelID, roller.output()+` (${triggers} triggers)`+botch, userID)
     } else if (message.match(/^\-rr \d+ \d+$/i)) {
         let text = Common.args(message)[0] + 'd6>3' || '';
         let count = Common.args(message)[1] || 1;
