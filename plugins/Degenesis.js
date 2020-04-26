@@ -14,7 +14,7 @@ exports.command = function(userID, channelID, serverID, message, sender) {
         let roller = create_roller(text, serverID, userID);
         let results = [];
         for (let i = 0; i < count; i++)
-            results.push(roller.roll().output() + calcBotch(roller) ? ' (botched if failed)\n' : '\n');
+            results.push(roller.roll().output()+` (${roller.roll_list.filter(r => r === 6).length} triggers)`+(calcBotch(roller) ? ' (botched if failed)\n' : '\n'));
         sender(channelID, results, userID)
     } else return true;
 }
