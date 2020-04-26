@@ -18,7 +18,7 @@ class Roll {
         this.keep = parseInt(dice_config && dice_config.keep || d_config.default.dice.keep);
         this.explode = false;
         this.brief = false;
-        this.conditional = {active: false, '<': null, '=': null, '>': null};
+        this.conditional = {active: false, '<': NaN, '=': NaN, '>': NaN};
         this.roll_list = [];
         this.mods_list = [];
         this.kept_list = [];
@@ -63,9 +63,10 @@ class Roll {
 
         let m_conditional = form.match(r_conditional);
         if (m_conditional) {
+            let n = parseInt(m_conditional[0].match(/\d+/)[0]);
             this.conditional.active = true;
-            this.conditional[m_conditional[0][0]] = parseInt(m_conditional[0]);
-            this.conditional[m_conditional[0][1]] = parseInt(m_conditional[0]);
+            this.conditional[m_conditional[0][0]] = n;
+            this.conditional[m_conditional[0][1]] = n;
         }
 
         console.log('count:', this.count, 'die:', this.die, 'mod:', this.mod, 'keep:', this.keep, 'explode:', this.explode, 'brief:', this.brief);
@@ -107,9 +108,9 @@ class Roll {
         if (this.conditional.active) {
             for (let i = 0; i < sorted_rolls.length; i++) {
                 let r = sorted_rolls[i].r;
-                if (this.conditional['<'] !== null && r < this.conditional['<']
-                 || this.conditional['='] !== null && r === this.conditional['=']
-                 || this.conditional['>'] !== null && r > this.conditional['>']) {
+                if (r < this.conditional['<']
+                 || r === this.conditional['=']
+                 || r > this.conditional['>']) {
                     this.kept_list.push(sorted_rolls[i].i)
                     total += 1;
                  }
