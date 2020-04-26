@@ -27,5 +27,5 @@ function calcBotch(roller) {
 function create_roller(text, server, user) {
     text = text || '';
     let config = require('../config.json');
-    return new Roll(text, config[server], config['*'], server, user);
+    return new require('./Roll.js')(text, config[server], config['*'], server, user);
 }
