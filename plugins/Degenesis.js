@@ -12,8 +12,8 @@ exports.command = function(userID, channelID, serverID, message, sender) {
         let roller = create_roller(text, serverID, userID);
         let results = [];
         for (let i = 0; i < count; i++)
-            results.push(roller.roll().output()+calcTriggers(roller)+calcBotch(roller)+'\n');
-        sender(channelID, results, userID)
+            results.push(roller.roll().output()+calcTriggers(roller)+calcBotch(roller));
+        sender(channelID, results.join('\n'), userID)
     } else return true;
 }
 
