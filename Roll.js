@@ -77,9 +77,6 @@ class Roll {
         this.mods_list = [];
         this.kept_list = [];
 
-        let sorted_rolls = this.roll_list.map((r, i) => {return {i, r}});
-        sorted_rolls.sort((a, b) => b.r-a.r);
-
         let total = 0;
         let explode_count = 0;
         for (let i = 0; i < this.count; i++) {
@@ -93,6 +90,9 @@ class Roll {
                     total += r + this.die*explode_count;
             }
         }
+
+        let sorted_rolls = this.roll_list.map((r, i) => {return {i, r}});
+        sorted_rolls.sort((a, b) => b.r-a.r);
 
         if (this.keep) {
             for (let i = 0; this.keep > 0 && i < this.keep; i++)
