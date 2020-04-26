@@ -95,7 +95,7 @@ exports.command = function(userID, channelID, serverID, message, sender) {
         }
 
         sender(channelID, notes.join('\n'), userID);
-    }
+    } else return true;
 }
 
 function write_spell(name, spell, user, server) {

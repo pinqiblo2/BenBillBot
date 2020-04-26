@@ -65,10 +65,13 @@ function command(userID, channelID, message) {
     try {
         let serverID = getServer(channelID, userID);
 
+        let cont = true;
         for (let plug in plugins) {
             if (PluginRegistry[serverID] && PluginRegistry[serverID].includes(plug))
-                plugins[plug].command(userID, channelID, serverID, message, send);
+                cont = cont && plugins[plug].command(userID, channelID, serverID, message, send);
         }
+
+        if (!cont) return;
 
         if (message.match(/^\-r($| )/i)) {
             let arg = Common.args(message)[0];
