@@ -61,6 +61,12 @@ Benbill.on('message', (user, userID, channelID, message, evt) => {
     command(userID, channelID, message);
 })
 
+// Automatically reconnect if the bot disconnects due to inactivity
+Benbill.on('disconnect', function(erMsg, code) {
+    console.log('----- Bot disconnected from Discord with code', code, 'for reason:', erMsg, '-----');
+    Benbill.connect();
+});
+
 function command(userID, channelID, message) {
     try {
         let serverID = getServer(channelID, userID);
