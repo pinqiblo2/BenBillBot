@@ -80,8 +80,8 @@ function command(userID, channelID, message) {
         if (!cont) return;
 
         if (message.match(/^\-r($| )/i)) {
-            let arg = Common.args(message)[0];
-            send(channelID, create_roller(arg, serverID, userID).output(), userID)
+            let args = Common.args(message);
+            send(channelID, create_roller(args[0], serverID, userID).output(), userID, args.comment)
         } else if (message.match(/^\-rr($| )/i)) {
             let text = Common.args(message)[0] || '';
             let count = Common.args(message)[1] || 1;
@@ -156,10 +156,10 @@ function command(userID, channelID, message) {
     }
 }
 
-function send(channel, message, user) {
+function send(channel, message, user, comment) {
     Benbill.sendMessage({
         to: channel,
-        message: (user ? `<@${user}>\n` : '') + message
+        message: (user ? `<@${user}>${comment ? ` ${comment}:` : ''}\n` : '') + message
     });
 }
 
