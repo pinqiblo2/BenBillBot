@@ -1,11 +1,11 @@
 exports.command = function(userID, channelID, serverID, message, sender) {
     const Common = require('../Common.js');
 
-    if (message.match(/^\-r \d+$/i)) {
-        message += 'd6>3';
-        let arg = Common.args(message)[0];
-        let roller = create_roller(arg, serverID, userID);
-        sender(channelID, roller.output()+calcTriggers(roller)+calcBotch(roller), userID)
+    if (message.match(/^\-r \d+($| )/i)) {
+        let args = Common.args(message);
+        roll = args[0] +  'd6>3';
+        let roller = create_roller(roll, serverID, userID);
+        sender(channelID, roller.output()+calcTriggers(roller)+calcBotch(roller), userID, args.comment)
     } else if (message.match(/^\-rr \d+ \d+$/i)) {
         let text = Common.args(message)[0] + 'd6>3' || '';
         let count = Common.args(message)[1] || 1;
