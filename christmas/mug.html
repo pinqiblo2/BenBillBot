@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="christmas.css" />
+        <title>Merry Christmas!</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+    <body>
+        <p>
+            Hope you like the mug! I thought the heatup pattern was cool. If you don't think you'll drink from it it, you can always use it to pot plants.
+        </p>
+        <p>
+            Now for the riddle:<br />
+            <b>What Animal Crossing character is my avatar on our switch?</b>
+        </p>
+        <div id="guess-content">
+            <input id="guess" type="text" />
+            <button onclick="guess()">Guess</button>
+        </div>
+
+        <div id="gift-container" style="display: none;">
+            <canvas width="300" height="300"></canvas>
+            <div id="gift" style="display: none;">
+                You win a gift card to a cool place I found downtown! Not sure if you've heard of it, but it's called Terrarium, and it seems to be at the intersection of some of your interests.
+            </div>
+        </div>
+        <div class="js-display"></div>
+
+        <script src="gift.js"></script>
+        <script>
+            function guess(e) {
+                if (document.getElementById('guess').value.toLowerCase() === "punchy")
+                    document.getElementById('gift-container').style.display = 'flex';
+            }
+        </script>
+    </body>
+</html>

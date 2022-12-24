@@ -28,6 +28,8 @@ app.get('/BenBill/status', (req, res) => {
   res.send();
 });
 
+app.use('/christmas', express.static('christmas'));
+
 
 
 var Benbill = new d.Client({

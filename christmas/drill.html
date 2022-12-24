@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="christmas.css" />
+        <title>Merry Christmas!</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+    <body>
+        <p>
+            What if I didn't get you the drills? Imagine. But hey, now you're unstoppable. You'll be able to drill through anything you meet. Just don't put holes in any boats or anything.
+        </p>
+        <p>
+            Now for the riddle:<br />
+            <b>What's my favorite drill-related anime?</b>
+        </p>
+        <div id="guess-content">
+            <input id="guess" type="text" />
+            <button onclick="guess()">Guess</button>
+        </div>
+
+        <div id="gift-container" style="display: none;">
+            <canvas width="300" height="300"></canvas>
+            <div id="gift" style="display: none;">
+                I feel like I've heard you talk about kayaking before. Is it something you'd like to try? Did you know there's a whole sea kayaking club thing in Portland? Well, now you have a giftcard that you can use to sign up for their functions!
+            </div>
+        </div>
+        <div class="js-display"></div>
+
+        <script src="gift.js"></script>
+        <script>
+            function guess(e) {
+                if (document.getElementById('guess').value.toLowerCase() === "gurren lagann")
+                    document.getElementById('gift-container').style.display = 'flex';
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="christmas.css" />
+        <title>Merry Christmas!</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+    <body>
+        <p>
+            Think of all the places you can mount your phone now! Taxis? Planes? Busses?? Trains???
+        </p>
+        <p>
+            Now for the riddle:<br />
+            <b>What is the difference between our phones' passcodes?</b>
+        </p>
+        <div id="guess-content">
+            <input id="guess" type="number" />
+            <button onclick="guess()">Guess</button>
+        </div>
+
+        <div id="gift-container" style="display: none;">
+            <canvas width="300" height="300"></canvas>
+            <div id="gift" style="display: none;">
+                I know you're more interested in public transit than trains themselves, but I thought it would be neat to get your a year membership to the Narrow Gauge Railway Co. here in Portland.
+                There's several perks of membership, mainly ticket and souvenir discounts.
+            </div>
+        </div>
+        <div class="js-display"></div>
+
+        <script src="gift.js"></script>
+        <script>
+            function guess(e) {
+                if (document.getElementById('guess').value.toLowerCase() === "467")
+                    document.getElementById('gift-container').style.display = 'flex';
+            }
+        </script>
+    </body>
+</html>

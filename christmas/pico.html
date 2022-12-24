@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="christmas.css" />
+        <title>Merry Christmas!</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+    <body>
+        <p>
+            The pico will keep for about a week, according to the owner of Taco Trio. Better eat it quick! You'll have to take it everywhere you go, in case you have an opportunity to use it!
+        </p>
+        <p>
+            Now for the riddle:<br />
+            <b>How much have I spent on Taco Trio delivery since quarantine started? (Not counting your reimbursement)</b>
+        </p>
+        <div id="guess-content">
+            <input id="guess" type="number" />
+            <button onclick="guess()">Guess</button>
+        </div>
+        <div id="lower" style="display: none; text-align: center;">Lower!</div>
+        <div id="higher" style="display: none; text-align: center;">Higher!</div>
+
+        <div id="gift-container" style="display: none;">
+            <canvas width="300" height="300"></canvas>
+            <div id="gift" style="display: none;">
+                We've always seen the duck boat tours around. Have you ever want to ride it? I wasn't sure, but I figure it was worth a shot. You're now the proud owner of a giftcard worth one tour ticket!
+            </div>
+        </div>
+        <div class="js-display"></div>
+
+        <script src="gift.js"></script>
+        <script>
+            function guess(e) {
+                var l = document.getElementById('lower');
+                var h = document.getElementById('higher');
+                l.style.display = 'none'
+                h.style.display = 'none'
+
+                var g = parseInt(document.getElementById('guess').value);
+                if (g === 280)
+                    document.getElementById('gift-container').style.display = 'flex';
+                else if (g > 280) 
+                    l.style.display = 'block'
+                else
+                    h.style.display = 'block'
+            }
+        </script>
+    </body>
+</html>
